@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Love Charts - Turn Your Conversations Into Art</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #fafafa;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 5%;
+      background-color: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #ff4f8b;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #ff4f8b;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background-color: #333;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 60px 5% 80px;
+      background: linear-gradient(to bottom, #fff6f9, #fff);
+    }
+
+    header h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #333;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      color: #555;
+      max-width: 700px;
+      margin: 0 auto 40px;
+    }
+
+    .platform-icons {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .platform-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+    }
+
+    .platform-icon i {
+      font-size: 2.5rem;
+      color: #555;
+    }
+
+    .platform-icon.whatsapp i {
+      color: #25D366;
+    }
+
+    .platform-icon.instagram i {
+      color: #C13584;
+    }
+
+    .platform-icon.telegram i {
+      color: #0088cc;
+    }
+
+    .coming-soon {
+      position: absolute;
+      top: -10px;
+      right: -30px;
+      background-color: #ff4f8b;
+      color: white;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .cta-button {
+      background-color: #ff4f8b;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255, 79, 139, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 79, 139, 0.4);
+    }
+
+    /* Theme Section */
+    .theme-section {
+      padding: 60px 5%;
+      text-align: center;
+    }
+
+    .theme-section h3 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .theme-intro {
+      max-width: 700px;
+      margin: 0 auto 40px;
+      color: #555;
+    }
+
+    /* Carousel */
+    .carousel-container {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .carousel-wrapper {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+
+    .carousel-item {
+      min-width: 33.333%;
+      padding: 10px;
+      transition: transform 0.3s;
+    }
+
+    .carousel-item img {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-caption {
+      margin-top: 10px;
+      font-weight: 500;
+    }
+
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(255, 255, 255, 0.7);
+      color: #333;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .carousel-button.prev {
+      left: 10px;
+    }
+
+    .carousel-button.next {
+      right: 10px;
+    }
+
+    /* Selector Section */
+    .selector-section {
+      padding: 60px 5%;
+      background-color: #fff;
+    }
+
+    .selector-section h3 {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 40px;
+      color: #333;
+    }
+
+    .selector-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .selector-item {
+      flex: 1 0 200px;
+      max-width: 280px;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-align: center;
+    }
+
+    .selector-item:hover,
+    .selector-item.active {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .selector-item.active {
+      border: 2px solid #ff4f8b;
+    }
+
+    .selector-icon {
+      font-size: 2rem;
+      color: #ff4f8b;
+      margin-bottom: 15px;
+    }
+
+    .selector-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    /* Instructions Section */
+    .instructions-container {
+      max-width: 1000px;
+      margin: 40px auto 0;
+      padding: 30px;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .instruction-set {
+      display: none;
+    }
+
+    .instruction-set.active {
+      display: block;
+    }
+
+    .instruction-set h4 {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+    }
+
+    .instruction-set ol {
+      padding-left: 30px;
+    }
+
+    .instruction-set li {
+      margin-bottom: 15px;
+    }
+
+    /* Product Details Section */
+    .product-details-section {
+      padding: 60px 5%;
+      background-color: #fff;
+    }
+
+    .product-details-section h3 {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 40px;
+      color: #333;
+    }
+
+    .product-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .product-image {
+      flex: 1;
+      min-width: 300px;
+      text-align: center;
+    }
+
+    .product-image img {
+      max-width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .product-selectors {
+      margin-bottom: 30px;
+    }
+
+    .selector-label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .selector-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .selector-btn {
+      padding: 10px 20px;
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .selector-btn.active {
+      background-color: #ff4f8b;
+      color: white;
+      border-color: #ff4f8b;
+    }
+
+    .product-price {
+      font-size: 2rem;
+      margin: 20px 0;
+      color: #ff4f8b;
+      font-weight: 600;
+    }
+
+    .order-button {
+      display: inline-block;
+      background-color: #ff4f8b;
+      color: white;
+      text-decoration: none;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255, 79, 139, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: none;
+    }
+
+    .order-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 79, 139, 0.4);
+    }
+
+    /* Footer */
+    footer {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 30px 5%;
+    }
+
+    .footer-content {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .social-icons a {
+      color: #fff;
+      font-size: 1.5rem;
+      transition: color 0.3s;
+    }
+
+    .social-icons a:hover {
+      color: #ff4f8b;
+    }
+
+    .copyright {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .carousel-item {
+        min-width: 50%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header h2 {
+        font-size: 2rem;
+      }
+
+      .nav-links {
+        position: fixed;
+        top: 70px;
+        right: -100%;
+        flex-direction: column;
+        background-color: white;
+        width: 70%;
+        height: 100vh;
+        padding: 40px 20px;
+        transition: right 0.3s ease;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        gap: 20px;
+      }
+
+      .nav-links.active {
+        right: 0;
+      }
+
+      .hamburger {
+        display: flex;
+        z-index: 101;
+      }
+
+      .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+      }
+
+      .carousel-item {
+        min-width: 100%;
+      }
+
+      .product-container {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 576px) {
+      header {
+        padding: 40px 5% 60px;
+      }
+
+      header h2 {
+        font-size: 1.7rem;
+      }
+
+      .platform-icons {
+        gap: 20px;
+      }
+
+      .selector-item {
+        flex: 1 0 100%;
+        max-width: 100%;
+      }
+
+      .instruction-set h4 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">
+      <img src="/api/placeholder/40/40" alt="Love Charts Logo">
+      <h1>Love Charts</h1>
+    </div>
+    <div class="hamburger" id="hamburger-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="nav-links" id="nav-links">
+      <a href="#">Home</a>
+      <a href="#">Our Story</a>
+      <a href="#">Gallery</a>
+      <a href="#">Contact</a>
+    </div>
+  </nav>
+
+  <header>
+    <h2>Turn Your Conversations Into Cherished Memories</h2>
+    <p>We transform your digital chats into beautifully designed art pieces that capture the essence of your
+      relationship—perfect for anniversaries, birthdays, or just because.</p>
+
+    <div class="platform-icons">
+      <div class="platform-icon whatsapp">
+        <i class="fab fa-whatsapp"></i>
+        <span>WhatsApp</span>
+      </div>
+      <div class="platform-icon instagram">
+        <i class="fab fa-instagram"></i>
+        <span>Instagram</span>
+      </div>
+      <div class="platform-icon telegram">
+        <i class="fab fa-telegram"></i>
+        <span>Telegram</span>
+        <span class="coming-soon">Soon</span>
+      </div>
+    </div>
+
+    <button class="cta-button">Create Your Chart</button>
+  </header>
+
+  <!-- Signature Designs Section -->
+  <div class="theme-section">
+    <h3>Signature Designs</h3>
+    <p class="theme-intro">Each Love Chart tells a unique story. Choose from our carefully crafted designs to match the
+      feel of your relationship and messages.</p>
+
+    <div class="carousel-container">
+      <button class="carousel-button prev" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+      <div class="carousel-wrapper" id="carousel-wrapper">
+        <div class="carousel-item">
+          <div>
+            <img src="/api/placeholder/283/400" alt="Azure Bloom Design">
+            <div class="image-caption">Azure Bloom</div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div>
+            <img src="/api/placeholder/283/400" alt="Linen Blue Design">
+            <div class="image-caption">Linen Blue</div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div>
+            <img src="/api/placeholder/283/400" alt="Rose Essence Design">
+            <div class="image-caption">Rose Essence</div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div>
+            <img src="/api/placeholder/283/400" alt="Linen Pink Design">
+            <div class="image-caption">Linen Pink</div>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-button next" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <!-- Selector Section -->
+  <div class="selector-section">
+    <h3>How It Works</h3>
+    <div class="selector-container">
+      <div class="selector-item active" data-instruction="whatsapp">
+        <div class="selector-icon"><i class="fab fa-whatsapp"></i></div>
+        <div class="selector-title">WhatsApp</div>
+        <p>Export your conversations from WhatsApp</p>
+      </div>
+      <div class="selector-item" data-instruction="instagram">
+        <div class="selector-icon"><i class="fab fa-instagram"></i></div>
+        <div class="selector-title">Instagram</div>
+        <p>Export your DMs from Instagram</p>
+      </div>
+      <div class="selector-item" data-instruction="design">
+        <div class="selector-icon"><i class="fas fa-paint-brush"></i></div>
+        <div class="selector-title">Choose Design</div>
+        <p>Select your favorite chart style</p>
+      </div>
+      <div class="selector-item" data-instruction="delivery">
+        <div class="selector-icon"><i class="fas fa-truck"></i></div>
+        <div class="selector-title">Delivery</div>
+        <p>Receive your custom love chart</p>
+      </div>
+    </div>
+
+    <div class="instructions-container">
+      <div class="instruction-set active" id="whatsapp-instructions">
+        <h4>How to Export WhatsApp Chats</h4>
+        <ol>
+          <li>Open the chat with your loved one in WhatsApp</li>
+          <li>Tap the three dots in the top-right corner</li>
+          <li>Select "More" and then "Export chat"</li>
+          <li>Choose "Without media" to make the file smaller</li>
+          <li>Send the exported chat file to us via email or our website</li>
+        </ol>
+      </div>
+
+      <div class="instruction-set" id="instagram-instructions">
+        <h4>How to Export Instagram DMs</h4>
+        <ol>
+          <li>Open Instagram in a web browser (not the app)</li>
+          <li>Go to Settings > Privacy and Security</li>
+          <li>Scroll down to "Data Download" and click "Request Download"</li>
+          <li>Enter your email and password</li>
+          <li>Select "Messages" under "Select types of information"</li>
+          <li>Click "Next" and then "Request Download"</li>
+          <li>You'll receive an email with your data within 48 hours</li>
+          <li>Send us the messages JSON file from the downloaded data</li>
+        </ol>
+      </div>
+
+      <div class="instruction-set" id="design-instructions">
+        <h4>Choose Your Perfect Design</h4>
+        <ol>
+          <li>Browse our gallery of design options</li>
+          <li>Consider the tone and feeling of your relationship</li>
+          <li>Select a color scheme that resonates with your story</li>
+          <li>Choose between digital delivery or framed print</li>
+          <li>Let us know if you have any custom elements you'd like to include</li>
+        </ol>
+      </div>
+
+      <div class="instruction-set" id="delivery-instructions">
+        <h4>Delivery Information</h4>
+        <ol>
+          <li>Digital designs are delivered via email within 3-5 business days</li>
+          <li>Framed prints are carefully packaged and shipped within 7-10 business days</li>
+          <li>You'll receive a tracking number for physical deliveries</li>
+          <li>We offer worldwide shipping (additional charges may apply)</li>
+          <li>Contact us if you need rush delivery for a special occasion</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- How to Access Your Chats History Section -->
+  <div class="selector-section">
+    <h3>How to Access Your Chats History</h3>
+    <div class="instructions-container">
+      <div class="instruction-set active">
+        <p>We understand that finding and exporting your precious conversations might seem challenging. Follow our step-by-step guides to easily export your chat history from different platforms. If you encounter any difficulties, our support team is always ready to assist you.</p>
+        <br>
+        <p>For detailed video tutorials, visit our YouTube channel or contact us directly through Instagram at @lovecharts_</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Details Section -->
+  <div class="product-details-section">
+    <h3>Product Details</h3>
+    <div class="product-container">
+      <div class="product-image">
+        <img src="/api/placeholder/400/500" alt="Product Preview" id="product-image">
+      </div>
+      <div class="product-info">
+        <div class="product-selectors">
+          <span class="selector-label">Design Theme:</span>
+          <div class="selector-buttons" id="theme-selector">
+            <button class="selector-btn active" data-theme="azure-bloom">Azure Bloom</button>
+            <button class="selector-btn" data-theme="linen-blue">Linen Blue</button>
+            <button class="selector-btn" data-theme="rose-essence">Rose Essence</button>
+            <button class="selector-btn" data-theme="linen-pink">Linen Pink</button>
+          </div>
+          
+          <span class="selector-label">Product Type:</span>
+          <div class="selector-buttons" id="type-selector">
+            <button class="selector-btn active" data-type="digital">Digital Version</button>
+            <button class="selector-btn" data-type="framed">Framed Version</button>
+          </div>
+        </div>
+        
+        <div class="product-price" id="product-price">₹499</div>
+        
+        <a href="https://instagram.com/lovecharts_" target="_blank" class="order-button">
+          Order Now
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="logo">
+        <img src="/api/placeholder/40/40" alt="Love Charts Logo">
+        <h1>Love Charts</h1>
+      </div>
+      <div class="social-icons">
+        <a href="https://instagram.com/lovecharts_" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-pinterest"></i></a>
+      </div>
+      <p>Turn your conversations into beautiful memories that last forever.</p>
+      <p class="copyright">&copy; 2025 Love Charts. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile Navigation
+    const hamburger = document.getElementById('hamburger-menu');
+    const navLinks = document.getElementById('nav-links');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('active');
+    });
+
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('active');
+      });
+    });
+
+    // Carousel Logic
+    const carouselWrapper = document.getElementById('carousel-wrapper');
+    const prevButton = document.querySelector('.carousel-button.prev');
+    const nextButton = document.querySelector('.carousel-button.next');
+    const carouselItems = document.querySelectorAll('.carousel-item');
+    
+    let currentIndex = 0;
+    let itemWidth;
+    let maxIndex;
+
+    function updateCarouselDisplay() {
+      if (window.innerWidth > 992) {
+        itemWidth = carouselWrapper.offsetWidth / 3;
+        maxIndex = carouselItems.length - 3;
+      } else if (window.innerWidth > 768) {
+        itemWidth = carouselWrapper.offsetWidth / 2;
+        maxIndex = carouselItems.length - 2;
+      } else {
+        itemWidth = carouselWrapper.offsetWidth;
+        maxIndex = carouselItems.length - 1;
+      }
+
+      carouselItems.forEach(item => {
+        item.style.minWidth = `${itemWidth}px`;
+      });
+
+      // Ensure currentIndex is valid
+      if (currentIndex > maxIndex) {
+        currentIndex = maxIndex;
+      }
+
+      carouselWrapper.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+    }
+
+    // Initialize carousel
+    updateCarouselDisplay();
+
+    // Update on window resize
+    window.addEventListener('resize', updateCarouselDisplay);
+
+    // Event listeners for carousel buttons
+    prevButton.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        carouselWrapper.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+      }
+    });
+
+    nextButton.addEventListener('click', () => {
+      if (currentIndex < maxIndex) {
+        currentIndex++;
+        carouselWrapper.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+      }
+    });
+
+    // Selector Section Logic
+    const selectorItems = document.querySelectorAll('.selector-item');
+    const instructionSets = document.querySelectorAll('.instruction-set');
+
+    selectorItems.forEach(item => {
+      item.addEventListener('click', () => {
+        // Remove active class from all selector items
+        selectorItems.forEach(item => item.classList.remove('active'));
+        
+        // Add active class to the clicked item
+        item.classList.add('active');
+        
+        // Show the corresponding instructions
+        const instructionId = item.getAttribute('data-instruction');
+        
+        // Hide all instruction sets
+        document.querySelectorAll('.instruction-set').forEach(set => {
+          set.classList.remove('active');
+        });
+        
+        // Show the selected instruction set
+        document.getElementById(`${instructionId}-instructions`).classList.add('active');
+      });
+    });
+
+    // Product Details Logic
+    const themeButtons = document.querySelectorAll('#theme-selector .selector-btn');
+    const typeButtons = document.querySelectorAll('#type-selector .selector-btn');
+    const productImage = document.getElementById('product-image');
+    const productPrice = document.getElementById('product-price');
+
+    // Images for different themes (placeholder paths for now)
+    const productImages = {
+      'azure-bloom': {
+        'digital': '/api/placeholder/400/500?text=Azure+Bloom+Digital',
+        'framed': '/api/placeholder/400/500?text=Azure+Bloom+Framed'
+      },
+      'linen-blue': {
+        'digital': '/api/placeholder/400/500?text=Linen+Blue+Digital',
+        'framed': '/api/placeholder/400/500?text=Linen+Blue+Framed'
+      },
+      'rose-essence': {
+        'digital': '/api/placeholder/400/500?text=Rose+Essence+Digital',
+        'framed': '/api/placeholder/400/500?text=Rose+Essence+Framed'
+      },
+      'linen-pink': {
+        'digital': '/api/placeholder/400/500?text=Linen+Pink+Digital',
+        'framed': '/api/placeholder/400/500?text=Linen+Pink+Framed'
+      }
+    };
+
+    // Prices for different product types
+    const prices = {
+      'digital': '₹499',
+      'framed': '₹1199'
+    };
+
+    // Function to update the product display
+    function updateProductDisplay() {
+      const selectedTheme = document.querySelector('#theme-selector .selector-btn.active').getAttribute('data-theme');
+      const selectedType = document.querySelector('#type-selector .selector-btn.active').getAttribute('data-type');
+      
+      // Update image
+      productImage.src = productImages[selectedTheme][selectedType];
+      
+      // Update price
+      productPrice.textContent = prices[selectedType];
+    }
+
+    // Add event listeners to theme buttons
+    themeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        themeButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        updateProductDisplay();
+      });
+    });
+
+    // Add event listeners to type buttons
+    typeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        typeButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        updateProductDisplay();
+      });
+    });
+
+    // Initialize product display
+    updateProductDisplay();
+  </script>
+</body>
+</html>
