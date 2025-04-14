@@ -1609,7 +1609,8 @@ header {
         margin-bottom: 0;
     }
 }
-
+@media (min-width: 10px) {
 body{
     overflow-x:hidden !important;
+}
 }
