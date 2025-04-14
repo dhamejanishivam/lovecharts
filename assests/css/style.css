@@ -1454,7 +1454,7 @@ footer h1 {
 .scroll-reveal {
     opacity: 0;
     transform: translateY(40px);
-    transition: all 0.01s cubic-bezier(0.5, 0, 0.3, 1);
+    transition: all 0.8s cubic-bezier(0.5, 0, 0.3, 1);
 }
 
 .scroll-reveal.active {
@@ -1609,6 +1609,7 @@ header {
         margin-bottom: 0;
     }
 }
+
 html,body{
     overflow-x:hidden !important;
 }
