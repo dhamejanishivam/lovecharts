@@ -87,19 +87,19 @@ const productPrice = document.getElementById('product-price');
 // Images for different themes (placeholder paths for now)
 const productImages = {
     'azure-bloom': {
-        'digital': 'https://via.placeholder.com/400x500?text=Azure+Bloom+Digital',
+        'digital': 'assests/images/Theme1/1.png',
         'framed': 'https://via.placeholder.com/400x500?text=Azure+Bloom+Framed'
     },
     'linen-blue': {
-        'digital': 'https://via.placeholder.com/400x500?text=Linen+Blue+Digital',
+        'digital': 'assests/images/Theme1/2.png',
         'framed': 'https://via.placeholder.com/400x500?text=Linen+Blue+Framed'
     },
     'rose-essence': {
-        'digital': 'https://via.placeholder.com/400x500?text=Rose+Essence+Digital',
+        'digital': 'assests/images/Theme1/3.png',
         'framed': 'https://via.placeholder.com/400x500?text=Rose+Essence+Framed'
     },
     'linen-pink': {
-        'digital': 'https://via.placeholder.com/400x500?text=Linen+Pink+Digital',
+        'digital': 'assests/images/Theme1/4.png',
         'framed': 'https://via.placeholder.com/400x500?text=Linen+Pink+Framed'
     }
 };
@@ -189,6 +189,107 @@ updateInstructions();
 
 
 
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Add parallax layers to header
+    const header = document.querySelector('header');
+    const headerContent = header.innerHTML;
+    header.innerHTML = `
+        <div class="parallax-layer parallax-layer-1"></div>
+        <div class="parallax-layer parallax-layer-2"></div>
+        <div class="parallax-content">${headerContent}</div>
+    `;
+    
+    // Initialize scroll animation
+    const scrollRevealElements = document.querySelectorAll('.feature-card, .section h3, .carousel-item, .product-container, .instruction-set.active');
+    scrollRevealElements.forEach(element => {
+        element.classList.add('scroll-reveal');
+    });
+    
+    // Handle scroll animations
+    function handleScrollAnimations() {
+        const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
+        scrollRevealElements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            const elementVisible = 150;
+            if (elementTop < window.innerHeight - elementVisible) {
+                element.classList.add('active');
+            }
+        });
+    }
+    
+    // Initial check for elements in viewport
+    handleScrollAnimations();
+    
+    // Listen for scroll events
+    window.addEventListener('scroll', handleScrollAnimations);
+    
+    // Implement smooth scroll effect
+    function smoothScrollTo(elementId) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            window.scrollTo({
+                top: element.offsetTop,
+                behavior: 'smooth'
+            });
+        }
+    }
+    
+    // Update function for buttons that use smooth scroll
+    const ctaButton = document.querySelector('.cta-button');
+    if (ctaButton) {
+        ctaButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            smoothScrollTo('chatInstruction1');
+        });
+    }
+    
+    // Implement 3D tilt effect for cards
+    const tiltElements = document.querySelectorAll('.feature-card, .carousel-item img, .product-image img');
+    
+    tiltElements.forEach(element => {
+        element.addEventListener('mousemove', function(e) {
+            if (window.innerWidth <= 768) return; // Only apply on desktop
+            
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const deltaX = (x - centerX) / centerX;
+            const deltaY = (y - centerY) / centerY;
+            
+            this.style.transform = `perspective(1000px) rotateX(${-deltaY * 5}deg) rotateY(${deltaX * 5}deg)`;
+        });
+        
+        element.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+    });
+    
+    // Parallax effect on scroll
+    window.addEventListener('scroll', function() {
+        const scrolled = window.scrollY;
+        
+        // Move parallax layers at different speeds
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        parallaxLayers.forEach((layer, index) => {
+            const speed = (index + 1) * 0.2;
+            layer.style.transform = `translateY(${scrolled * speed}px)`;
+        });
+        
+        // Add subtle movement to other elements
+        document.querySelectorAll('.feature-card, .carousel-item.active img').forEach((element, index) => {
+            const speed = 0.03 + (index * 0.01);
+            element.style.transform = `translateY(${scrolled * -speed}px)`;
+        });
+    });
+});
 
 
 
