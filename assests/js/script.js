@@ -355,7 +355,7 @@ document.getElementById("fileInput").addEventListener("change", function () {
   reader.onload = function () {
     const base64Data = reader.result.split(",")[1]; // remove "data:*/*;base64," part
 
-    fetch("https://script.google.com/macros/s/AKfycbxYzK93A-BLahXmsKDO9Qo9KfBvOgfekgjlsHJgXyT1Eoq63x0/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbyFKyVYWxmn-FVHAItfuDGo7n-cl0OCtf6TcGWTs-5x1kfQdZv9B5OBpvq4VWrQZyPt/exec", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
