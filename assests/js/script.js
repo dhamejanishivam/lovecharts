@@ -348,29 +348,31 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 
 
-const form = document.getElementById("uploadForm");
-const fileInput = document.getElementById("fileInput");
-
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
-
-  const file = fileInput.files[0];
+document.getElementById("fileInput").addEventListener("change", function () {
+  const file = this.files[0];
   const reader = new FileReader();
 
-  reader.onload = function (e) {
-    const base64Data = e.target.result.split(",")[1]; // strip data URI
+  reader.onload = function () {
+    const base64Data = reader.result.split(",")[1]; // remove "data:*/*;base64," part
 
     fetch("https://script.google.com/macros/s/AKfycbxYzK93A-BLahXmsKDO9Qo9KfBvOgfekgjlsHJgXyT1Eoq63x0/exec", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
       body: new URLSearchParams({
         file: base64Data,
         mimeType: file.type,
         fileName: file.name
       })
     })
-      .then(res => res.text())
-      .then(msg => alert(msg))
-      .catch(err => alert("Upload failed: " + err));
+    .then((res) => res.text())
+    .then((resText) => {
+      alert("✅ " + resText);
+    })
+    .catch((err) => {
+      alert("❌ Upload failed: " + err);
+    });
   };
 
   reader.readAsDataURL(file);
