@@ -63,6 +63,7 @@ nav a {
     font-weight: 600;
     transition: all 0.3s;
     position: relative;
+    cursor: pointer;
 }
 
 nav a:hover {
@@ -1109,6 +1110,7 @@ footer h1 {
         margin: 1em 0 !important;
         font-size: 1.2rem;
         display: block;
+
     }
 
     /* Header Improvements */

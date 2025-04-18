@@ -193,7 +193,7 @@ updateInstructions();
 
 
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Add parallax layers to header
     const header = document.querySelector('header');
     const headerContent = header.innerHTML;
@@ -202,13 +202,13 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="parallax-layer parallax-layer-2"></div>
         <div class="parallax-content">${headerContent}</div>
     `;
-    
+
     // Initialize scroll animation
     const scrollRevealElements = document.querySelectorAll('.feature-card, .section h3, .carousel-item, .product-container, .instruction-set.active');
     scrollRevealElements.forEach(element => {
         element.classList.add('scroll-reveal');
     });
-    
+
     // Handle scroll animations
     function handleScrollAnimations() {
         const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
@@ -220,13 +220,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // Initial check for elements in viewport
     handleScrollAnimations();
-    
+
     // Listen for scroll events
     window.addEventListener('scroll', handleScrollAnimations);
-    
+
     // Implement smooth scroll effect
     function smoothScrollTo(elementId) {
         const element = document.getElementById(elementId);
@@ -237,52 +237,52 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
-    
+
     // Update function for buttons that use smooth scroll
     const ctaButton = document.querySelector('.cta-button');
     if (ctaButton) {
-        ctaButton.addEventListener('click', function(e) {
+        ctaButton.addEventListener('click', function (e) {
             e.preventDefault();
             smoothScrollTo('chatInstruction1');
         });
     }
-    
+
     // Implement 3D tilt effect for cards
     const tiltElements = document.querySelectorAll('.feature-card, .carousel-item img, .product-image img');
-    
+
     tiltElements.forEach(element => {
-        element.addEventListener('mousemove', function(e) {
+        element.addEventListener('mousemove', function (e) {
             if (window.innerWidth <= 768) return; // Only apply on desktop
-            
+
             const rect = this.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            
+
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-            
+
             const deltaX = (x - centerX) / centerX;
             const deltaY = (y - centerY) / centerY;
-            
+
             this.style.transform = `perspective(1000px) rotateX(${-deltaY * 5}deg) rotateY(${deltaX * 5}deg)`;
         });
-        
-        element.addEventListener('mouseleave', function() {
+
+        element.addEventListener('mouseleave', function () {
             this.style.transform = '';
         });
     });
-    
+
     // Parallax effect on scroll
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', function () {
         const scrolled = window.scrollY;
-        
+
         // Move parallax layers at different speeds
         const parallaxLayers = document.querySelectorAll('.parallax-layer');
         parallaxLayers.forEach((layer, index) => {
             const speed = (index + 1) * 0.2;
             layer.style.transform = `translateY(${scrolled * speed}px)`;
         });
-        
+
         // Add subtle movement to other elements
         document.querySelectorAll('.feature-card, .carousel-item.active img').forEach((element, index) => {
             const speed = 0.03 + (index * 0.01);
@@ -314,7 +314,7 @@ function smoothScrollTo(id) {  // Changed function name
 
 
 // Override default scroll behavior
-window.scrollTo = function(options) {
+window.scrollTo = function (options) {
     if (typeof options === 'object') {
         window.scroll({
             top: options.top,
@@ -332,7 +332,7 @@ window.scrollTo = function(options) {
 
 // Make all anchor links smooth
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
+    anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const targetId = this.getAttribute('href');
         const targetElement = document.querySelector(targetId);
@@ -346,31 +346,21 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 
-urlmy = "https://script.google.com/macros/s/AKfycbxmXjCJXvCcCPzNIs66aZ5xrkMjGSvi3h8rtiztzUWl2jQDzRZbegoKmzrKoJOwIr4/exec";
 
-document.getElementById("fileInput").addEventListener("change", function () {
-    const file = this.files[0];
-    const reader = new FileReader();
-  
-    reader.onload = function () {
-      const base64Data = reader.result.split(",")[1]; // Remove data header
-  
-      fetch(urlmy, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: new URLSearchParams({
-          file: base64Data,
-          mimeType: file.type,
-          fileName: file.name
-        })
-      })
-      .then(res => res.text())
-      .then(text => alert("✅ Upload Success: " + text))
-      .catch(err => alert("❌ Upload failed: " + err));
-    };
-  
-    reader.readAsDataURL(file);
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const targetId = sessionStorage.getItem('scrollToSection');
+    if (targetId) {
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+      }
+      sessionStorage.removeItem('scrollToSection'); // Clean up
+    }
   });
-  
