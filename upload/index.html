@@ -4,11 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Charts Chat Upload</title>
+    <title>Love Charts – Upload Your Chat</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Upload your WhatsApp or Instagram chat to turn it into a beautiful, personalized Love Chart. Perfect gift for your partner, best friend, or family.">
+    <meta name="keywords"
+        content="love charts, chat upload, chat posters, whatsapp chat gift, personalized chart, relationship gift, anniversary gift, custom poster">
+    <meta name="author" content="Love Charts">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph for WhatsApp/Facebook -->
+    <meta property="og:title" content="Love Charts – Upload Your Chat">
+    <meta property="og:description"
+        content="Turn your messages into something magical. Upload your chat now and get your personalized Love Chart.">
+    <meta property="og:image" content="https://yourdomain.in/preview.jpg"> <!-- Replace with real image -->
+    <meta property="og:url" content="https://yourdomain.in/upload"> <!-- Replace with actual page URL -->
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/logo/logo16.png">
+
+    <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assests/css/style.css">
-    <link rel="stylesheet" href="../assests/css/upload.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/upload.css">
 </head>
 
 <body>
@@ -32,8 +55,9 @@
 
     <div class="upload-container">
         <h2>Upload Your Chat</h2>
-        <p>Share your special moments with us, and we'll transform them into a beautiful Love Chart that tells your unique story.</p>
-        
+        <p>Share your special moments with us, and we'll transform them into a beautiful Love Chart that tells your
+            unique story.</p>
+
         <form id="uploadForm">
             <input type="text" name="name" placeholder="Your Name" required>
             <input type="email" name="email" placeholder="Your Email" required>
@@ -49,7 +73,7 @@
                 <option value="Rose Essence">Rose Essence</option>
                 <option value="Linen Pink">Linen Pink</option>
             </select>
-            
+
             <div class="file-upload-container">
                 <label for="chat-file" class="file-upload-label">
                     <i class="fas fa-cloud-upload-alt"></i> Choose your chat file
@@ -57,10 +81,10 @@
                 <input type="file" id="chat-file" name="file" required>
                 <div class="file-name">No file selected</div>
             </div>
-            
+
             <button type="submit">Upload & Create My Chart</button>
         </form>
-        
+
         <p id="status"></p>
     </div>
 
@@ -100,4 +124,5 @@
 
     <script src="../assests/js/upload.js"></script>
 </body>
+
 </html>
