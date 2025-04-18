@@ -346,15 +346,16 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 
+urlmy = "https://script.google.com/macros/s/AKfycbxmXjCJXvCcCPzNIs66aZ5xrkMjGSvi3h8rtiztzUWl2jQDzRZbegoKmzrKoJOwIr4/exec";
 
 document.getElementById("fileInput").addEventListener("change", function () {
     const file = this.files[0];
     const reader = new FileReader();
   
     reader.onload = function () {
-      const base64Data = reader.result.split(",")[1]; // clean Base64
+      const base64Data = reader.result.split(",")[1]; // Remove data header
   
-      fetch("https://script.google.com/macros/s/AKfycbz1ZquRVnLYvQUVdzQneDAqq3ibqdTZevoSHtir-6AI0sL2Ft8oarUaP4gNAbgY5x1M/exec", {
+      fetch(urlmy, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
@@ -366,7 +367,7 @@ document.getElementById("fileInput").addEventListener("change", function () {
         })
       })
       .then(res => res.text())
-      .then(text => alert("✅ " + text))
+      .then(text => alert("✅ Upload Success: " + text))
       .catch(err => alert("❌ Upload failed: " + err));
     };
   
