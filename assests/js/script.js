@@ -347,33 +347,29 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 
 
-
 document.getElementById("fileInput").addEventListener("change", function () {
-  const file = this.files[0];
-  const reader = new FileReader();
-
-  reader.onload = function () {
-    const base64Data = reader.result.split(",")[1]; // remove "data:*/*;base64," part
-
-    fetch("https://script.google.com/macros/s/AKfycbyFKyVYWxmn-FVHAItfuDGo7n-cl0OCtf6TcGWTs-5x1kfQdZv9B5OBpvq4VWrQZyPt/exec", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: new URLSearchParams({
-        file: base64Data,
-        mimeType: file.type,
-        fileName: file.name
+    const file = this.files[0];
+    const reader = new FileReader();
+  
+    reader.onload = function () {
+      const base64Data = reader.result.split(",")[1]; // clean Base64
+  
+      fetch("https://script.google.com/macros/s/AKfycbz1ZquRVnLYvQUVdzQneDAqq3ibqdTZevoSHtir-6AI0sL2Ft8oarUaP4gNAbgY5x1M/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams({
+          file: base64Data,
+          mimeType: file.type,
+          fileName: file.name
+        })
       })
-    })
-    .then((res) => res.text())
-    .then((resText) => {
-      alert("✅ " + resText);
-    })
-    .catch((err) => {
-      alert("❌ Upload failed: " + err);
-    });
-  };
-
-  reader.readAsDataURL(file);
-});
+      .then(res => res.text())
+      .then(text => alert("✅ " + text))
+      .catch(err => alert("❌ Upload failed: " + err));
+    };
+  
+    reader.readAsDataURL(file);
+  });
+  
