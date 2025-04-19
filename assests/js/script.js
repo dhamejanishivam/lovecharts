@@ -285,7 +285,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Add subtle movement to other elements
         document.querySelectorAll('.feature-card, .carousel-item.active img').forEach((element, index) => {
-            const speed = 0.03 + (index * 0.01);
+            // const speed = 0.03 + (index * 0.001); // old ai code
+            const speed = 0.03 + (index * 0.00001);
             element.style.transform = `translateY(${scrolled * -speed}px)`;
         });
     });
@@ -364,3 +365,139 @@ document.addEventListener('DOMContentLoaded', function () {
       sessionStorage.removeItem('scrollToSection'); // Clean up
     }
   });
+
+
+  // Customer Reviews functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Array of reviews - you can easily add more reviews here
+    const reviews = [
+        {
+            name: "Shanaya & Aayan",
+            location: "Mumbai",
+            rating: 5,
+            text: "Our Love Chart is now the centerpiece of our living room. It's such a personal and meaningful gift that captures our journey together. The attention to detail is amazing!",
+            date: "February 2025"
+        },
+        {
+            name: "Sneha M.",
+            location: "Bangalore",
+            rating: 5,
+            text: "I got this for my best friend's birthday. She literally cried when she saw how our 7-year friendship was beautifully visualized. Worth every rupee!",
+            date: "January 2025"
+        },
+        {
+            name: "Raj & Anita",
+            location: "Delhi",
+            rating: 5,
+            text: "We were hesitant about uploading our chats, but their privacy policy convinced us. The process was seamless and the result is absolutely stunning. A perfect anniversary gift!",
+            date: "March 2025"
+        }
+        // Add more reviews here as they come in
+    ];
+
+    const reviewsContainer = document.getElementById('reviews-container');
+    const reviewDots = document.getElementById('review-dots');
+    const prevReviewBtn = document.getElementById('prev-review');
+    const nextReviewBtn = document.getElementById('next-review');
+    
+    let currentReviewIndex = 0;
+    const reviewsPerPage = window.innerWidth < 768 ? 1 : 2; // Show 1 on mobile, 2 on desktop
+    
+    // Initialize reviews
+    function initReviews() {
+        // Clear container
+        reviewsContainer.innerHTML = '';
+        reviewDots.innerHTML = '';
+        
+        // Create dots for navigation
+        for (let i = 0; i < Math.ceil(reviews.length / reviewsPerPage); i++) {
+            const dot = document.createElement('span');
+            dot.classList.add('review-dot');
+            if (i === Math.floor(currentReviewIndex / reviewsPerPage)) {
+                dot.classList.add('active');
+            }
+            dot.addEventListener('click', () => {
+                currentReviewIndex = i * reviewsPerPage;
+                showReviews();
+            });
+            reviewDots.appendChild(dot);
+        }
+        
+        showReviews();
+    }
+    
+    // Show current reviews
+    function showReviews() {
+        reviewsContainer.innerHTML = '';
+        
+        // Update dots
+        const dots = document.querySelectorAll('.review-dot');
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === Math.floor(currentReviewIndex / reviewsPerPage));
+        });
+        
+        // Display current reviews
+        for (let i = currentReviewIndex; i < currentReviewIndex + reviewsPerPage && i < reviews.length; i++) {
+            const review = reviews[i];
+            
+            const reviewCard = document.createElement('div');
+            reviewCard.classList.add('review-card');
+            
+            // Create star rating
+            let stars = '';
+            for (let s = 0; s < 5; s++) {
+                if (s < review.rating) {
+                    stars += '<i class="fas fa-star"></i>';
+                } else {
+                    stars += '<i class="far fa-star"></i>';
+                }
+            }
+            
+            reviewCard.innerHTML = `
+                <div class="review-header">
+                    <div class="review-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="review-meta">
+                        <h4>${review.name}</h4>
+                        <p>${review.location} • ${review.date}</p>
+                        <div class="review-stars">${stars}</div>
+                    </div>
+                </div>
+                <div class="review-text">
+                    <p>${review.text}</p>
+                </div>
+            `;
+            
+            reviewsContainer.appendChild(reviewCard);
+        }
+    }
+    
+    // Event listeners for navigation
+    prevReviewBtn.addEventListener('click', () => {
+        if (currentReviewIndex > 0) {
+            currentReviewIndex -= reviewsPerPage;
+            showReviews();
+        }
+    });
+    
+    nextReviewBtn.addEventListener('click', () => {
+        if (currentReviewIndex + reviewsPerPage < reviews.length) {
+            currentReviewIndex += reviewsPerPage;
+            showReviews();
+        }
+    });
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        const newReviewsPerPage = window.innerWidth < 768 ? 1 : 2;
+        if (newReviewsPerPage !== reviewsPerPage) {
+            reviewsPerPage = newReviewsPerPage;
+            currentReviewIndex = 0; // Reset to first page on resize
+            initReviews();
+        }
+    });
+    
+    // Initialize
+    initReviews();
+});
