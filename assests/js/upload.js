@@ -7,14 +7,14 @@ const form = document.getElementById("uploadForm");
 const status = document.getElementById("status");
 let name = "";
 let email = "";
-let chatType = "";
+let productType = "";
 let themeType = '';
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   name = form.name.value.trim();
   email = form.email.value.trim();
-  chatType = form.chatType.value;
+  productType = form.productType.value;
   themeType = form.themeType.value;
   const fileInput = form.file;
 
@@ -42,7 +42,7 @@ form.addEventListener("submit", async (e) => {
     const payload = new URLSearchParams();
     payload.append("name", name);
     payload.append("email", email);
-    payload.append("chatType", chatType);
+    payload.append("chatType", productType);
     payload.append("fileContent", base64);
     payload.append("mimeType", file.type);
     payload.append("originalFileName", file.name);
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
       document.querySelector('.upload-container > p').style.display = 'none';
 
 
-      const message = `📥 New File Uploaded!\n👤 Name: ${name}\n📧 Email: ${email}\n💬 Chat Type: ${chatType} in ${themeType} theme`;
+      const message = `📥 New File Uploaded!\n👤 Name: ${name}\n📧 Email: ${email}\n💬 Product Type: ${productType} in ${themeType} theme`;
       sendDeatilsToTelegram(message);
       
       // Show thank you message
