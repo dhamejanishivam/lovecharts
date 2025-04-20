@@ -1,6 +1,8 @@
 var UPLOAD_URL = 'https://script.google.com/macros/s/AKfycbxOyIt-uhgPdI1TiaPY3HVMkE9B8OTm1pquMG-EdVwcKDdD2OuQ9zPr6Ng9h-ylUy_guQ/exec';
 
 
+var isSuccessful = true;
+
 const form = document.getElementById("uploadForm");
 const status = document.getElementById("status");
 let name = "";
@@ -16,9 +18,22 @@ form.addEventListener("submit", async (e) => {
   themeType = form.themeType.value;
   const fileInput = form.file;
 
-  if (!fileInput.files.length) return alert("Please choose a file.");
-
+  if (!fileInput.files.length) {
+    alert("Please choose a file.");
+    isSuccessful=false
+    return;
+  }
+  
   const file = fileInput.files[0];
+  
+  // 100 MB limit
+  const MAX_SIZE = 100 * 1024 * 1024;
+  
+  if (file.size > MAX_SIZE) {
+    alert("Your current file size is too large. Max allowed size is 100 MB.");
+    isSuccessful=false
+    return;
+  }
 
   const reader = new FileReader();
   reader.onload = async () => {
@@ -75,8 +90,9 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // Display loading state
     statusElement.innerHTML = '<div class="loading-spinner"></div> Uploading your chat...';
-
+    
     // Simulate form submission (replace with actual form submission)
+    if (isSuccessful){
     setTimeout(function () {
       // Hide the form
       uploadForm.style.display = 'none';
@@ -99,7 +115,8 @@ document.addEventListener('DOMContentLoaded', function () {
                       <a href="index.html" class="home-button">Back to Home</a>
                   </div>
               `;
-    }, 2000);
+            }, 2000);
+          }
   });
 });
 

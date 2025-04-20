@@ -88,19 +88,19 @@ const productPrice = document.getElementById('product-price');
 const productImages = {
     'azure-bloom': {
         'digital': 'assests/images/Theme1/1.png',
-        'framed': 'https://via.placeholder.com/400x500?text=Azure+Bloom+Framed'
+        'framed': 'assests/images/framed_themes/1.png'
     },
     'linen-blue': {
         'digital': 'assests/images/Theme1/2.png',
-        'framed': 'https://via.placeholder.com/400x500?text=Linen+Blue+Framed'
+        'framed': 'assests/images/framed_themes/2.png'
     },
     'rose-essence': {
         'digital': 'assests/images/Theme1/3.png',
-        'framed': 'https://via.placeholder.com/400x500?text=Rose+Essence+Framed'
+        'framed': 'assests/images/framed_themes/3.png'
     },
     'linen-pink': {
         'digital': 'assests/images/Theme1/4.png',
-        'framed': 'https://via.placeholder.com/400x500?text=Linen+Pink+Framed'
+        'framed': 'assests/images/framed_themes/4.png'
     }
 };
 
@@ -114,6 +114,14 @@ const prices = {
 function updateProductDisplay() {
     const selectedTheme = document.querySelector('#theme-selector .selector-btn.active').getAttribute('data-theme');
     const selectedType = document.querySelector('#type-selector .selector-btn.active').getAttribute('data-type');
+    
+    let frameDiv = document.getElementById("framsizeDiv")
+    if (selectedType=='framed'){
+        frameDiv.style.display='block'
+    }
+    else{
+        frameDiv.style.display='none'
+    }
 
     // Update image
     productImage.src = productImages[selectedTheme][selectedType];
@@ -190,10 +198,108 @@ updateInstructions();
 
 
 
+// Custom JS code to get all info
+async function getUserInfo() {
+    let message = "";
+    message+='Someone clicked the order button, their details are : \n'
+
+    // Get IP address from public API
+    const ipData = await fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .catch(() => ({ ip: "Unavailable" }));
+    message += `IP Address: ${ipData.ip}\n`;
+
+    // Referrer
+    message += `Referrer (Previous Site): ${document.referrer || "Direct Visit"}\n`;
+
+    // Timezone
+    message += `Timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}\n`;
+
+    // Date offset
+    message += `Timezone Offset: ${new Date().getTimezoneOffset()} minutes\n`;
+
+    // Browser info
+    message += `User Agent: ${navigator.userAgent}\n`;
+    message += `Platform: ${navigator.platform}\n`;
+    message += `Vendor: ${navigator.vendor}\n`;
+    message += `Languages: ${navigator.languages.join(", ")}\n`;
+
+    // Hardware info
+    message += `CPU Cores: ${navigator.hardwareConcurrency || "Unknown"}\n`;
+    message += `RAM: ${navigator.deviceMemory || "Unknown"} GB\n`;
+    message += `Touch Support: ${'ontouchstart' in window}\n`;
+
+    // Screen info
+    message += `Screen: ${screen.width}x${screen.height}\n`;
+    message += `Available Screen: ${screen.availWidth}x${screen.availHeight}\n`;
+    message += `Viewport: ${window.innerWidth}x${window.innerHeight}\n`;
+    message += `Device Pixel Ratio: ${window.devicePixelRatio}\n`;
+    message += `Color Depth: ${screen.colorDepth}\n`;
+
+    // Online status
+    message += `Online: ${navigator.onLine}\n`;
+
+    // Cookies
+    message += `Cookies Enabled: ${navigator.cookieEnabled}\n`;
+
+    // Battery info
+    try {
+        const battery = await navigator.getBattery();
+        message += `Battery: ${Math.round(battery.level * 100)}% (Charging: ${battery.charging})\n`;
+    } catch (err) {
+        message += `Battery: Unavailable\n`;
+    }
+
+    // Network info
+    const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if (conn) {
+        message += `Network Type: ${conn.effectiveType || "Unknown"}\n`;
+        message += `Downlink: ${conn.downlink || "?"} Mbps\n`;
+        message += `RTT: ${conn.rtt || "?"} ms\n`;
+    } else {
+        message += `Network Info: Unavailable\n`;
+    }
+
+    // Plugins
+    let pluginList = [];
+    for (let i = 0; i < navigator.plugins.length; i++) {
+        pluginList.push(navigator.plugins[i].name);
+    }
+    message += `Browser Plugins: ${pluginList.length ? pluginList.join(", ") : "None/Blocked"}\n`;
+
+    // WebGL GPU Info (fingerprint)
+    try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+        const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+        const vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
+        message += `GPU: ${renderer} (${vendor})\n`;
+    } catch (e) {
+        message += `GPU: Unavailable\n`;
+    }
+
+    // Clipboard access support
+    const clipboardSupport = !!navigator.clipboard;
+    message += `Clipboard API Supported: ${clipboardSupport}\n`;
+
+    // Local Storage, Session Storage
+    message += `LocalStorage Supported: ${typeof window.localStorage !== "undefined"}\n`;
+    message += `SessionStorage Supported: ${typeof window.sessionStorage !== "undefined"}\n`;
+
+    // Dark mode preference
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    message += `Dark Mode Preferred: ${prefersDark}\n`;
+
+
+    sendDeatilsToTelegram(info);
+}
 
 
 
+// Initialize Google login after the page is loaded
 document.addEventListener('DOMContentLoaded', function () {
+
     // Add parallax layers to header
     const header = document.querySelector('header');
     const headerContent = header.innerHTML;
@@ -358,17 +464,17 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 document.addEventListener('DOMContentLoaded', function () {
     const targetId = sessionStorage.getItem('scrollToSection');
     if (targetId) {
-      const targetElement = document.getElementById(targetId);
-      if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth' });
-      }
-      sessionStorage.removeItem('scrollToSection'); // Clean up
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+        sessionStorage.removeItem('scrollToSection'); // Clean up
     }
-  });
+});
 
 
-  // Customer Reviews functionality
-document.addEventListener('DOMContentLoaded', function() {
+// Customer Reviews functionality
+document.addEventListener('DOMContentLoaded', function () {
     // Array of reviews - you can easily add more reviews here
     const reviews = [
         {
@@ -399,16 +505,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const reviewDots = document.getElementById('review-dots');
     const prevReviewBtn = document.getElementById('prev-review');
     const nextReviewBtn = document.getElementById('next-review');
-    
+
     let currentReviewIndex = 0;
     const reviewsPerPage = window.innerWidth < 768 ? 1 : 2; // Show 1 on mobile, 2 on desktop
-    
+
     // Initialize reviews
     function initReviews() {
         // Clear container
         reviewsContainer.innerHTML = '';
         reviewDots.innerHTML = '';
-        
+
         // Create dots for navigation
         for (let i = 0; i < Math.ceil(reviews.length / reviewsPerPage); i++) {
             const dot = document.createElement('span');
@@ -422,27 +528,27 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             reviewDots.appendChild(dot);
         }
-        
+
         showReviews();
     }
-    
+
     // Show current reviews
     function showReviews() {
         reviewsContainer.innerHTML = '';
-        
+
         // Update dots
         const dots = document.querySelectorAll('.review-dot');
         dots.forEach((dot, i) => {
             dot.classList.toggle('active', i === Math.floor(currentReviewIndex / reviewsPerPage));
         });
-        
+
         // Display current reviews
         for (let i = currentReviewIndex; i < currentReviewIndex + reviewsPerPage && i < reviews.length; i++) {
             const review = reviews[i];
-            
+
             const reviewCard = document.createElement('div');
             reviewCard.classList.add('review-card');
-            
+
             // Create star rating
             let stars = '';
             for (let s = 0; s < 5; s++) {
@@ -452,7 +558,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     stars += '<i class="far fa-star"></i>';
                 }
             }
-            
+
             reviewCard.innerHTML = `
                 <div class="review-header">
                     <div class="review-avatar">
@@ -468,11 +574,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p>${review.text}</p>
                 </div>
             `;
-            
+
             reviewsContainer.appendChild(reviewCard);
         }
     }
-    
+
     // Event listeners for navigation
     prevReviewBtn.addEventListener('click', () => {
         if (currentReviewIndex > 0) {
@@ -480,14 +586,14 @@ document.addEventListener('DOMContentLoaded', function() {
             showReviews();
         }
     });
-    
+
     nextReviewBtn.addEventListener('click', () => {
         if (currentReviewIndex + reviewsPerPage < reviews.length) {
             currentReviewIndex += reviewsPerPage;
             showReviews();
         }
     });
-    
+
     // Handle window resize
     window.addEventListener('resize', () => {
         const newReviewsPerPage = window.innerWidth < 768 ? 1 : 2;
@@ -497,7 +603,41 @@ document.addEventListener('DOMContentLoaded', function() {
             initReviews();
         }
     });
-    
+
     // Initialize
     initReviews();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function sendDeatilsToTelegram(message) {
+    // Function to send a Telegram message
+    sendTelegramMessage(message)
+    async function sendTelegramMessage(message) {
+        const url = `https://api.telegram.org/bot8113534372:AAF2DahT2CQYToSvG7Z_VMZ_-0BmweybX5I/sendMessage`;
+        try {
+            // Send the message to the Telegram bot
+            await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `chat_id=1293804795&text=${encodeURIComponent(message)}`,
+            });
+        } catch (error) {
+            alert("Error sending your message, please try again later")
+            console.error("Error sending message", error);
+        }
+    }
+}

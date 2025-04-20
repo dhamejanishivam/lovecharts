@@ -1,0 +1,108 @@
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+
+<style>
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  #info {
+    white-space: pre-wrap;
+    font-family: monospace;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    max-width: 600px;
+  }
+</style>
+
+
+<button onclick="showGoogleLogin()">Get User Info</button>
+<div id="g_id_onload" data-client_id="175614720048-u2t7bps24k44u10c8vbn77c6u8l748f7.apps.googleusercontent.com"
+    data-callback="handleCredentialResponse" data-auto_prompt="false">
+</div>
+
+<div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
+    data-shape="rectangular" data-logo_alignment="left" style="display:none;">
+</div>
+
+<div id="info"></div>
+
+
+<script>
+
+
+
+
+
+function showGoogleLogin() {
+    document.querySelector('.g_id_signin').style.display = 'block';
+  }
+
+  function parseJwt(token) {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(c =>
+      '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+    ).join(''));
+
+    return JSON.parse(jsonPayload);
+  }
+
+  async function handleCredentialResponse(response) {
+    const data = parseJwt(response.credential);
+    let message = '';
+
+    // User info from Google
+    message += `Name: ${data.name}\n`;
+    message += `Email: ${data.email}\n`;
+    message += `Picture: ${data.picture}\n`;
+
+    // Device & browser info
+    message += `\nBrowser: ${navigator.userAgent}`;
+    message += `\nPlatform: ${navigator.platform}`;
+    message += `\nLanguage: ${navigator.language}`;
+    message += `\nTimezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`;
+
+    // Battery Info
+    if (navigator.getBattery) {
+      try {
+        const battery = await navigator.getBattery();
+        message += `\nBattery: ${(battery.level * 100).toFixed(0)}%`;
+        message += `\nCharging: ${battery.charging}`;
+      } catch (e) {
+        message += `\nBattery info not available`;
+      }
+    }
+
+    // Referrer
+    message += `\nPrevious Page: ${document.referrer || 'None'}`;
+
+    // Screen Info
+    message += `\nScreen: ${screen.width}x${screen.height}`;
+
+    // Connection Info
+    if (navigator.connection) {
+      message += `\nConnection Type: ${navigator.connection.effectiveType}`;
+    }
+
+    // Location (just city-level via IP, using external service)
+    try {
+      const res = await fetch('https://ipinfo.io/json?token=3fe9b1b34c6f07'); // Free IPInfo token
+      const loc = await res.json();
+      message += `\nLocation: ${loc.city}, ${loc.region}, ${loc.country}`;
+      message += `\nIP Address: ${loc.ip}`;
+      message += `\nISP: ${loc.org}`;
+    } catch (err) {
+      message += `\nLocation/IP info failed`;
+    }
+
+    document.getElementById('info').innerText = message;
+    alert(message);
+  }
+
+
+
+</script>
